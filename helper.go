@@ -7,10 +7,6 @@ import (
     "time"
 )
 
-
-type JSONObject map[string]interface{}
-type JSONArray []interface{}
-
 func JSONValueToString(value interface{}) string {
     switch v := value.(type) {
     case nil:
@@ -123,7 +119,7 @@ func JSONValueToFloat64(value interface{}) float64 {
     return 0
 }
 
-func jsonValueToBool(value interface{}) bool {
+func JSONValueToBool(value interface{}) bool {
     switch v := value.(type) {
     case nil:
         return false
@@ -194,115 +190,3 @@ func JSONValueToTime(value interface{}, format string) *time.Time {
     }
     return nil
 }
-
-func NewJSONObject() JSONObject {
-    return make(JSONObject)
-}
-
-func NewJSONObjectFromMap(m map[string]interface{}) JSONObject {
-    return JSONObject(m)
-}
-
-func (p JSONObject) Del(key string) {
-    p[key] = nil, false
-}
-
-func (p JSONObject) Set(key string, value interface{}) {
-    p[key] = value
-}
-
-func (p JSONObject) Get(key string) interface{} {
-    value, _ := p[key]
-    return value
-}
-
-func (p JSONObject) GetAsString(key string) string {
-    value, _ := p[key]
-    return JSONValueToString(value)
-}
-
-func (p JSONObject) GetAsInt(key string) int {
-    value, _ := p[key]
-    return JSONValueToInt(value)
-}
-
-func (p JSONObject) GetAsInt64(key string) int64 {
-    value, _ := p[key]
-    return JSONValueToInt64(value)
-}
-
-
-func (p JSONObject) GetAsFloat64(key string) float64 {
-    value, _ := p[key]
-    return JSONValueToFloat64(value)
-}
-
-func (p JSONObject) GetAsBool(key string) bool {
-    value, _ := p[key]
-    return jsonValueToBool(value)
-}
-
-func (p JSONObject) GetAsObject(key string) JSONObject {
-    value, _ := p[key]
-    return JSONValueToObject(value)
-}
-
-func (p JSONObject) GetAsArray(key string) JSONArray {
-    value, _ := p[key]
-    return JSONValueToArray(value)
-}
-
-func (p JSONObject) GetAsTime(key string, format string) *time.Time {
-    value, _ := p[key]
-    return JSONValueToTime(value, format)
-}
-
-func NewJSONArray() JSONArray {
-    return make([]interface{}, 0)
-}
-
-func NewJSONArrayFromArray(value []interface{}) JSONArray {
-    return JSONArray(value)
-}
-
-func (p JSONArray) Len() int {
-    return len(p)
-}
-
-func (p JSONArray) GetAsString(index int) string {
-    value := p[index]
-    return JSONValueToString(value)
-}
-
-func (p JSONArray) GetAsInt(index int) int {
-    value := p[index]
-    return JSONValueToInt(value)
-}
-
-func (p JSONArray) GetAsInt64(index int) int64 {
-    value := p[index]
-    return JSONValueToInt64(value)
-}
-
-func (p JSONArray) GetAsFloat64(index int) float64 {
-    value := p[index]
-    return JSONValueToFloat64(value)
-}
-
-func (p JSONArray) GetAsObject(index int) JSONObject {
-    value := p[index]
-    return JSONValueToObject(value)
-}
-
-func (p JSONArray) GetAsArray(index int) JSONArray {
-    value := p[index]
-    return JSONValueToArray(value)
-}
-
-func (p JSONArray) GetAsTime(index int, format string) *time.Time {
-    value := p[index]
-    return JSONValueToTime(value, format)
-}
-
-
-
