@@ -1,6 +1,7 @@
 package jsonhelper
 
 import (
+    "container/list"
     "time"
 )
 
@@ -51,4 +52,63 @@ func (p JSONArray) GetAsArray(index int) JSONArray {
 func (p JSONArray) GetAsTime(index int, format string) *time.Time {
     value := p[index]
     return JSONValueToTime(value, format)
+}
+
+func (p JSONArray) Compact(removeFalse bool, removeEmptyStrings bool, removeZero bool, removeEmptyArrays bool, removeEmptyObjects bool) JSONArray {
+    if len(p) == 0 {
+        if removeEmptyArrays {
+            return nil
+        }
+        return p
+    }
+    l := list.New()
+    for _, v := range p {
+        var value interface{}
+        value = v
+        switch t := v.(type) {
+        case nil:
+            continue
+        case string:
+            if removeEmptyStrings && len(t) == 0  { continue }
+        case JSONObject:
+            value = t.Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
+        case JSONArray:
+            value = t.Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
+        case map[string]interface{}:
+            value = NewJSONObjectFromMap(t).Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
+        case []interface{}:
+            value = NewJSONArrayFromArray(t).Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
+        case float64:
+            if removeZero && t == 0.0 { continue }
+        case float32:
+            if removeZero && t == 0.0 { continue }
+        case int64:
+            if removeZero && t == 0 { continue }
+        case int32:
+            if removeZero && t == 0 { continue }
+        case int:
+            if removeZero && t == 0 { continue }
+        case int16:
+            if removeZero && t == 0 { continue }
+        case int8:
+            if removeZero && t == 0 { continue }
+        case byte:
+            if removeZero && t == 0 { continue }
+        case bool:
+            if removeFalse && t == false { continue }
+        }
+        if value == nil {
+            continue
+        }
+        l.PushBack(value)
+    }
+    lLen := l.Len()
+    if removeEmptyArrays && lLen == 0 {
+        return nil
+    }
+    arr := make([]interface{}, lLen)
+    for e, i := l.Front(), 0; e != nil; e, i = e.Next(), i + 1 {
+        arr[i] = e.Value
+    }
+    return NewJSONArrayFromArray(arr)
 }
