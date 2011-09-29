@@ -1,6 +1,7 @@
 package jsonhelper
 
 import (
+    "json"
     "time"
 )
 
@@ -12,6 +13,11 @@ func NewJSONObject() JSONObject {
 
 func NewJSONObjectFromMap(m map[string]interface{}) JSONObject {
     return JSONObject(m)
+}
+
+func (p JSONObject) String() string {
+    b, _ := json.Marshal(&p)
+    return string(b)
 }
 
 func (p JSONObject) Del(key string) {

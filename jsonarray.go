@@ -2,6 +2,7 @@ package jsonhelper
 
 import (
     "container/list"
+    "json"
     "time"
 )
 
@@ -17,6 +18,11 @@ func NewJSONArrayFromArray(value []interface{}) JSONArray {
 
 func (p JSONArray) Len() int {
     return len(p)
+}
+
+func (p JSONArray) String() string {
+    b, _ := json.Marshal(&p)
+    return string(b)
 }
 
 func (p JSONArray) GetAsString(index int) string {
