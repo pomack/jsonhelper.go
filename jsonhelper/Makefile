@@ -4,7 +4,7 @@
 
 include $(GOROOT)/src/Make.inc
 
-TARG=github.com/pomack/jsonhelper
+TARG=github.com/pomack/jsonhelper.go/jsonhelper
 GOFILES=\
     encode.go\
     helper.go\
