@@ -50,11 +50,10 @@ func MarshalWithOptions(v interface{}, timeFormat string) (retval interface{}, e
     if v == nil {
         return nil, nil
     }
-    e := &encodeState{timeFormat:timeFormat}
+    e := &encodeState{timeFormat: timeFormat}
     retval = e.reflectValue(reflect.ValueOf(v), false)
     return
 }
-
 
 // stringValues is a slice of reflect.Value holding *reflect.StringValue.
 // It implements the methods to sort by string.
@@ -66,52 +65,52 @@ func (sv stringValues) Less(i, j int) bool { return sv.get(i) < sv.get(j) }
 func (sv stringValues) get(i int) string   { return sv[i].String() }
 
 type encodeState struct {
-    isObject bool
-    isArray bool
-    isFloat bool
-    isInt bool
-    isUint bool
-    isString bool
-    isBool bool
-    isNull bool
-    obj JSONObject
-    arr JSONArray
-    fValue float64
-    iValue int64
-    uValue uint64
-    sValue string
-    bValue bool
+    isObject   bool
+    isArray    bool
+    isFloat    bool
+    isInt      bool
+    isUint     bool
+    isString   bool
+    isBool     bool
+    isNull     bool
+    obj        JSONObject
+    arr        JSONArray
+    fValue     float64
+    iValue     int64
+    uValue     uint64
+    sValue     string
+    bValue     bool
     timeFormat string
 }
 
 func isValidTag(s string) bool {
-	if s == "" {
-		return false
-	}
-	for _, c := range s {
-		if c != '$' && c != '-' && c != '_' && !unicode.IsLetter(c) && !unicode.IsDigit(c) {
-			return false
-		}
-	}
-	return true
+    if s == "" {
+        return false
+    }
+    for _, c := range s {
+        if c != '$' && c != '-' && c != '_' && !unicode.IsLetter(c) && !unicode.IsDigit(c) {
+            return false
+        }
+    }
+    return true
 }
 
 func isEmptyValue(v reflect.Value) bool {
-	switch v.Kind() {
-	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
-		return v.Len() == 0
-	case reflect.Bool:
-		return !v.Bool()
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int() == 0
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return v.Uint() == 0
-	case reflect.Float32, reflect.Float64:
-		return v.Float() == 0
-	case reflect.Interface, reflect.Ptr:
-		return v.IsNil()
-	}
-	return false
+    switch v.Kind() {
+    case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
+        return v.Len() == 0
+    case reflect.Bool:
+        return !v.Bool()
+    case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+        return v.Int() == 0
+    case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+        return v.Uint() == 0
+    case reflect.Float32, reflect.Float64:
+        return v.Float() == 0
+    case reflect.Interface, reflect.Ptr:
+        return v.IsNil()
+    }
+    return false
 }
 
 func (e *encodeState) newWithSameOptions() *encodeState {
@@ -121,14 +120,30 @@ func (e *encodeState) newWithSameOptions() *encodeState {
 }
 
 func (e *encodeState) Value() interface{} {
-    if e.isObject { return e.obj }
-    if e.isArray { return e.arr }
-    if e.isFloat { return e.fValue }
-    if e.isInt { return e.iValue }
-    if e.isUint { return e.uValue }
-    if e.isString { return e.sValue }
-    if e.isBool { return e.bValue }
-    if e.isNull { return nil }
+    if e.isObject {
+        return e.obj
+    }
+    if e.isArray {
+        return e.arr
+    }
+    if e.isFloat {
+        return e.fValue
+    }
+    if e.isInt {
+        return e.iValue
+    }
+    if e.isUint {
+        return e.uValue
+    }
+    if e.isString {
+        return e.sValue
+    }
+    if e.isBool {
+        return e.bValue
+    }
+    if e.isNull {
+        return nil
+    }
     return nil
 }
 
@@ -214,7 +229,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         n := v.NumField()
         e.obj = NewJSONObject()
         e.isObject = true
-        for i := 0; i< n; i++ {
+        for i := 0; i < n; i++ {
             f := t.Field(i)
             if f.PkgPath != "" {
                 continue
@@ -297,4 +312,3 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
     }
     return
 }
-

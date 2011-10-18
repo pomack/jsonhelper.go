@@ -79,7 +79,9 @@ func (p JSONArray) Compact(removeFalse bool, removeEmptyStrings bool, removeZero
         case nil:
             continue
         case string:
-            if removeEmptyStrings && len(t) == 0  { continue }
+            if removeEmptyStrings && len(t) == 0 {
+                continue
+            }
         case JSONObject:
             value = t.Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
         case JSONArray:
@@ -89,23 +91,41 @@ func (p JSONArray) Compact(removeFalse bool, removeEmptyStrings bool, removeZero
         case []interface{}:
             value = NewJSONArrayFromArray(t).Compact(removeFalse, removeEmptyStrings, removeZero, removeEmptyArrays, removeEmptyObjects)
         case float64:
-            if removeZero && t == 0.0 { continue }
+            if removeZero && t == 0.0 {
+                continue
+            }
         case float32:
-            if removeZero && t == 0.0 { continue }
+            if removeZero && t == 0.0 {
+                continue
+            }
         case int64:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case int32:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case int:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case int16:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case int8:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case byte:
-            if removeZero && t == 0 { continue }
+            if removeZero && t == 0 {
+                continue
+            }
         case bool:
-            if removeFalse && t == false { continue }
+            if removeFalse && t == false {
+                continue
+            }
         }
         if value == nil {
             continue
@@ -117,7 +137,7 @@ func (p JSONArray) Compact(removeFalse bool, removeEmptyStrings bool, removeZero
         return nil
     }
     arr := make([]interface{}, lLen)
-    for e, i := l.Front(), 0; e != nil; e, i = e.Next(), i + 1 {
+    for e, i := l.Front(), 0; e != nil; e, i = e.Next(), i+1 {
         arr[i] = e.Value
     }
     return NewJSONArrayFromArray(arr)
