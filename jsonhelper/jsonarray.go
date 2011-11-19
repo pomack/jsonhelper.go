@@ -39,6 +39,11 @@ func (p JSONArray) GetAsInt(index int) int {
     return JSONValueToInt(value)
 }
 
+func (p JSONArray) GetAsInt32(index int) int32 {
+    value := p[index]
+    return JSONValueToInt32(value)
+}
+
 func (p JSONArray) GetAsInt64(index int) int64 {
     value := p[index]
     return JSONValueToInt64(value)

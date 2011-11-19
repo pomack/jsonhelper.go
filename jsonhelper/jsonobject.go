@@ -51,6 +51,11 @@ func (p JSONObject) GetAsInt(key string) int {
     return JSONValueToInt(value)
 }
 
+func (p JSONObject) GetAsInt32(key string) int32 {
+    value, _ := p[key]
+    return JSONValueToInt32(value)
+}
+
 func (p JSONObject) GetAsInt64(key string) int64 {
     value, _ := p[key]
     return JSONValueToInt64(value)

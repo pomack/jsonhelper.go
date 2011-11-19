@@ -41,6 +41,20 @@ func JSONValueToInt(value interface{}) int {
         return v
     case float64:
         return int(v)
+    case uint8:
+        return int(v)
+    case uint16:
+        return int(v)
+    case uint32:
+        return int(v)
+    case uint64:
+        return int(v)
+    case int8:
+        return int(v)
+    case int16:
+        return int(v)
+    case int32:
+        return int(v)
     case int64:
         return int(v)
     case string:
@@ -63,6 +77,50 @@ func JSONValueToInt(value interface{}) int {
     return 0
 }
 
+func JSONValueToInt32(value interface{}) int32 {
+    switch v := value.(type) {
+    case nil:
+        return 0
+    case int:
+        return int32(v)
+    case float64:
+        return int32(v)
+    case uint8:
+        return int32(v)
+    case uint16:
+        return int32(v)
+    case uint32:
+        return int32(v)
+    case uint64:
+        return int32(v)
+    case int8:
+        return int32(v)
+    case int16:
+        return int32(v)
+    case int32:
+        return int32(v)
+    case int64:
+        return int32(v)
+    case string:
+        i, _ := strconv.Atoi(v)
+        return int32(i)
+    case bool:
+        if v {
+            return 1
+        }
+        return 0
+    case JSONObject:
+        return int32(len(v))
+    case JSONArray:
+        return int32(len(v))
+    case map[string]interface{}:
+        return int32(len(v))
+    case []interface{}:
+        return int32(len(v))
+    }
+    return 0
+}
+
 func JSONValueToInt64(value interface{}) int64 {
     switch v := value.(type) {
     case nil:
@@ -70,6 +128,20 @@ func JSONValueToInt64(value interface{}) int64 {
     case int:
         return int64(v)
     case float64:
+        return int64(v)
+    case uint8:
+        return int64(v)
+    case uint16:
+        return int64(v)
+    case uint32:
+        return int64(v)
+    case uint64:
+        return int64(v)
+    case int8:
+        return int64(v)
+    case int16:
+        return int64(v)
+    case int32:
         return int64(v)
     case int64:
         return v
@@ -101,6 +173,20 @@ func JSONValueToFloat64(value interface{}) float64 {
         return float64(v)
     case float64:
         return v
+    case uint8:
+        return float64(v)
+    case uint16:
+        return float64(v)
+    case uint32:
+        return float64(v)
+    case uint64:
+        return float64(v)
+    case int8:
+        return float64(v)
+    case int16:
+        return float64(v)
+    case int32:
+        return float64(v)
     case int64:
         return float64(v)
     case string:
