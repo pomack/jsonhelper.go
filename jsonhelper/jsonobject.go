@@ -5,7 +5,7 @@
 package jsonhelper
 
 import (
-    "json"
+    "encoding/json"
     "time"
 )
 
@@ -25,7 +25,7 @@ func (p JSONObject) String() string {
 }
 
 func (p JSONObject) Del(key string) {
-    p[key] = nil, false
+    delete(p, key)
 }
 
 func (p JSONObject) Set(key string, value interface{}) {
@@ -81,7 +81,7 @@ func (p JSONObject) GetAsArray(key string) JSONArray {
     return JSONValueToArray(value)
 }
 
-func (p JSONObject) GetAsTime(key string, format string) *time.Time {
+func (p JSONObject) GetAsTime(key string, format string) time.Time {
     value, _ := p[key]
     return JSONValueToTime(value, format)
 }

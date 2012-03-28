@@ -6,7 +6,7 @@ package jsonhelper
 
 import (
     "container/list"
-    "json"
+    "encoding/json"
     "time"
 )
 
@@ -64,7 +64,7 @@ func (p JSONArray) GetAsArray(index int) JSONArray {
     return JSONValueToArray(value)
 }
 
-func (p JSONArray) GetAsTime(index int, format string) *time.Time {
+func (p JSONArray) GetAsTime(index int, format string) time.Time {
     value := p[index]
     return JSONValueToTime(value, format)
 }

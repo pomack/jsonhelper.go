@@ -8,10 +8,9 @@ package jsonhelper
 
 import (
     "encoding/base64"
-    "json"
+    "encoding/json"
     "reflect"
     "runtime"
-    "os"
     "sort"
     "strconv"
     "time"
@@ -21,13 +20,13 @@ import (
 var byteSliceType = reflect.TypeOf([]byte(nil))
 var timeType = reflect.TypeOf(time.Time{})
 
-func Marshal(v interface{}) (retval interface{}, err os.Error) {
+func Marshal(v interface{}) (retval interface{}, err error) {
     defer func() {
         if r := recover(); r != nil {
             if _, ok := r.(runtime.Error); ok {
                 panic(r)
             }
-            err = r.(os.Error)
+            err = r.(error)
         }
     }()
     if v == nil {
@@ -38,13 +37,13 @@ func Marshal(v interface{}) (retval interface{}, err os.Error) {
     return
 }
 
-func MarshalWithOptions(v interface{}, timeFormat string) (retval interface{}, err os.Error) {
+func MarshalWithOptions(v interface{}, timeFormat string) (retval interface{}, err error) {
     defer func() {
         if r := recover(); r != nil {
             if _, ok := r.(runtime.Error); ok {
                 panic(r)
             }
-            err = r.(os.Error)
+            err = r.(error)
         }
     }()
     if v == nil {
@@ -147,7 +146,7 @@ func (e *encodeState) Value() interface{} {
     return nil
 }
 
-func (e *encodeState) error(err os.Error) {
+func (e *encodeState) error(err error) {
     panic(err)
 }
 
@@ -185,7 +184,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         }
     case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
         if stringify {
-            e.sValue = strconv.Itoa64(v.Int())
+            e.sValue = strconv.FormatInt(v.Int(), 10)
             e.isString = true
             retval = e.sValue
         } else {
@@ -195,7 +194,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         }
     case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
         if stringify {
-            e.sValue = strconv.Uitoa64(v.Uint())
+            e.sValue = strconv.FormatUint(v.Uint(), 10)
             e.isString = true
             retval = e.sValue
         } else {
@@ -205,7 +204,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         }
     case reflect.Float32, reflect.Float64:
         if stringify {
-            e.sValue = strconv.FtoaN(v.Float(), 'g', -1, v.Type().Bits())
+            e.sValue = strconv.FormatFloat(v.Float(), 'g', -1, v.Type().Bits())
             e.isString = true
             retval = e.sValue
         } else {

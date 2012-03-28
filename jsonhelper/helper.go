@@ -5,7 +5,7 @@
 package jsonhelper
 
 import (
-    "json"
+    "encoding/json"
     "strconv"
     "strings"
     "time"
@@ -20,9 +20,9 @@ func JSONValueToString(value interface{}) string {
     case int:
         return strconv.Itoa(v)
     case int64:
-        return strconv.Itoa64(v)
+        return strconv.FormatInt(v, 10)
     case float64:
-        return strconv.Ftoa64(v, 'g', -1)
+        return strconv.FormatFloat(v, 'g', -1, 64)
     case bool:
         if v {
             return "true"
@@ -146,7 +146,7 @@ func JSONValueToInt64(value interface{}) int64 {
     case int64:
         return v
     case string:
-        i, _ := strconv.Atoi64(v)
+        i, _ := strconv.ParseInt(v, 10, 64)
         return i
     case bool:
         if v {
@@ -190,7 +190,7 @@ func JSONValueToFloat64(value interface{}) float64 {
     case int64:
         return float64(v)
     case string:
-        i, _ := strconv.Atof64(v)
+        i, _ := strconv.ParseFloat(v, 64)
         return i
     case bool:
         if v {
@@ -260,23 +260,23 @@ func JSONValueToArray(value interface{}) JSONArray {
     return NewJSONArray()
 }
 
-func JSONValueToTime(value interface{}, format string) *time.Time {
+func JSONValueToTime(value interface{}, format string) time.Time {
     switch v := value.(type) {
     case nil, bool, JSONArray, JSONObject, []interface{}, map[string]interface{}:
-        return nil
+        return time.Time{}
     case string:
         t, _ := time.Parse(format, v)
         return t
     case int64:
-        return time.SecondsToUTC(v)
+        return time.Unix(v, 0).UTC()
     case int:
-        return time.SecondsToUTC(int64(v))
+        return time.Unix(int64(v), 0).UTC()
     case float64:
-        return time.SecondsToUTC(int64(v))
-    case time.Time:
-        return &v
+        return time.Unix(int64(v), 0).UTC()
     case *time.Time:
+        return *v
+    case time.Time:
         return v
     }
-    return nil
+    return time.Time{}
 }
