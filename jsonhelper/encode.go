@@ -162,7 +162,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
             err = json.Unmarshal(b, &value)
         }
         if err != nil {
-            e.error(&json.MarshalerError{v.Type(), err})
+            e.error(&json.MarshalerError{Type:v.Type(), Err:err})
         }
         return retval
     }
@@ -268,7 +268,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         retval = e.obj
     case reflect.Map:
         if v.Type().Key().Kind() != reflect.String {
-            e.error(&json.UnsupportedTypeError{v.Type()})
+            e.error(&json.UnsupportedTypeError{Type:v.Type()})
         }
         if v.IsNil() {
             e.isNull = true
@@ -307,7 +307,7 @@ func (e *encodeState) reflectValue(v reflect.Value, stringify bool) (retval inte
         }
         retval = e.reflectValue(v.Elem(), false)
     default:
-        e.error(&json.UnsupportedTypeError{v.Type()})
+        e.error(&json.UnsupportedTypeError{Type:v.Type()})
     }
     return
 }
